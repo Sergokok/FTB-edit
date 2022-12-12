@@ -54,7 +54,10 @@ function App() {
                     setLoggedIn(true);
                     history.push(location.pathname);
                 })
-                .catch((err) => console.log(err));
+                // .catch((err) => console.log(err));
+                .catch((err) => {
+                    if (err.status === 401) signOut();
+                })
         }
     }, []);
 
@@ -173,8 +176,11 @@ function App() {
                     JSON.stringify([data, ...savedMovies])
                 );
             })
+            // .catch((err) => {
+            //     console.log(err);
+            // });
             .catch((err) => {
-                console.log(err);
+                if (err.status === 401) signOut();
             });
     }
 
@@ -188,8 +194,11 @@ function App() {
                 );
                 setSavedMovies(newMovies);
             })
+            // .catch((err) => {
+            //     console.log(err);
+            // });
             .catch((err) => {
-                console.log(err);
+                if (err.status === 401) signOut();
             });
     }
 
