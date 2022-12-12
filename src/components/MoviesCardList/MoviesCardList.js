@@ -3,6 +3,7 @@ import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import {useLocation} from "react-router-dom";
 import {getCards} from "../../utils/constants";
+import Preloader from "../Preloader/Preloader";
 
 const MoviesCardList = ({
     movies,
@@ -10,7 +11,8 @@ const MoviesCardList = ({
     onDislike,
     savedMovies,
     searchKeyword,
-    noResults
+    noResults,
+    isLoading
 }) => {
 
     const location = useLocation();
@@ -66,6 +68,7 @@ const MoviesCardList = ({
         return (
             <section className='movies-cards-list'>
                 <div className='movies-cards-list__container'>
+                    {isLoading && <Preloader/>}
                     {movies.length ? (
                         moviesToShow.map((movie) =>
                             <MoviesCard
@@ -100,6 +103,7 @@ const MoviesCardList = ({
         return (
             <section className='movies-cards-list'>
                 <div className='movies-cards-list__container'>
+                    {isLoading && <Preloader/>}
                     {movies.length ? (
                         moviesToShow.map((movie) =>
                             <MoviesCard
