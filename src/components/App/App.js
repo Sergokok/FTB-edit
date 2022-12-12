@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import './App.css';
-import {Route, Switch, useRouteMatch, useHistory, useLocation, Redirect } from 'react-router-dom';
+import {Route, Switch, useRouteMatch, useHistory, useLocation, Redirect} from 'react-router-dom';
 
 import * as mainApi from '../../utils/MainApi';
 
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 import Header from '../Header/Header';
@@ -38,7 +38,7 @@ function App() {
     );
 
     const hideHeader = ['/not-found', '/signup', '/signin'];
-    const hideFooter = ['/not-found','/profile', '/signup', '/signin'];
+    const hideFooter = ['/not-found', '/profile', '/signup', '/signin'];
 
     const [profileMessage, setProfileMessage] = useState('');
     const [registerMessage, setRegisterMessage] = useState('');
@@ -82,24 +82,24 @@ function App() {
         }
     }, [loggedIn, filteredMovies])
 
-    const onRegister = ({ name, password, email }) => {
+    const onRegister = ({name, password, email}) => {
         mainApi
-            .signup ({ name, password, email })
+            .signup({name, password, email})
             .then((res) => {
                 if (res) {
-                    onLogin({ email, password });
+                    onLogin({email, password});
                     setRegisterMessage('Успешная регистрация...');
                 }
             })
-            .catch ((err) => {
+            .catch((err) => {
                 setRegisterMessage('Что-то пошло не так. Попробуйте ещё раз.');
             })
     }
 
-    const onLogin = ({ email, password }) => {
+    const onLogin = ({email, password}) => {
         mainApi
-            .signin ({ email, password })
-            .then ((data) => {
+            .signin({email, password})
+            .then((data) => {
                 localStorage.setItem('jwt', data.token);
                 setLoggedIn(true);
                 mainApi.getUserInfo(localStorage.getItem('jwt'))
@@ -109,19 +109,19 @@ function App() {
                 setLoginMessage('Авторизация прошла успешно...');
                 history.push('/movies');
             })
-            .catch ((err) => {
+            .catch((err) => {
                 setLoginMessage('Неправильный логин или пароль. Попробуйте еще раз.');
             })
     }
 
     const handleUpdateUser = (user) => {
         mainApi
-            .setUserInfo (user, localStorage.getItem('jwt'))
-            .then ((userInfo) => {
+            .setUserInfo(user, localStorage.getItem('jwt'))
+            .then((userInfo) => {
                 setProfileMessage('Данные пользователя успешно обновлены');
                 setCurrentUser(userInfo);
             })
-            .catch ((err) => {
+            .catch((err) => {
                 setProfileMessage('Ошибка редактирования данных профиля. Попробуйте ещё раз.');
             })
     }
@@ -197,76 +197,96 @@ function App() {
         <CurrentUserContext.Provider
             value={currentUser}>
 
-        <div className="app">
-            {useRouteMatch(hideHeader) ? null :
-                ( <Header loggedIn={loggedIn}/>
-                )}
+            <div className="app">
+                {useRouteMatch(hideHeader) ? null :
+                    (<Header loggedIn={loggedIn}/>
+                    )}
 
-            <Switch>
-                <Route exact path="/">
-                    <Main />
-                </Route>
+                <Switch>
+                    <Route exact path="/">
+                        <Main/>
+                    </Route>
 
-                <Route path='/signup'>
-                    <Register
-                        onAuth={onRegister}
-                        infoMessage={registerMessage}
-                    />
-                </Route>
+                    <Route exact path='/signup'>
+                        {!loggedIn ? (
+                            <Register
+                                onAuth={onRegister}
+                                infoMessage={registerMessage}
+                            />
+                        ) : (
+                            <Redirect to='/'/>
+                        )}
+                    </Route>
+                    <Route exact path='/signin'>
+                        {!loggedIn ? (
+                        <Login
+                            onAuth={onLogin}
+                            infoMessage={loginMessage}/>
+                        ) : (
+                        <Redirect to='/'/>
+                        )}
+                    </Route>
 
-                <Route path='/signin'>
-                    <Login
-                        onAuth={onLogin}
-                        infoMessage={loginMessage}/>
-                </Route>
+                    {/*<Route path='/signup'>*/}
+                    {/*    <Register*/}
+                    {/*        onAuth={onRegister}*/}
+                    {/*        infoMessage={registerMessage}*/}
+                    {/*    />*/}
+                    {/*</Route>*/}
 
-                <ProtectedRoute
-                    path='/movies'
-                    exact
-                    component={Movies}
-                    loggedIn={loggedIn}
-                    isLoading={isLoading}
-                    movies={movies}
-                    onSubmit={handleSearchMovies}
-                    onLike={handleSaveMovie}
-                    onDislike={handleDeleteMovie}
-                    searchKeyword={searchKeyword}
-                    savedMovies={savedMovies}
-                    setAllMovies={setAllMovies}
-                >
-                </ProtectedRoute>
+                    {/*<Route path='/signin'>*/}
+                    {/*    <Login*/}
+                    {/*        onAuth={onLogin}*/}
+                    {/*        infoMessage={loginMessage}/>*/}
+                    {/*</Route>*/}
 
-                <ProtectedRoute
-                    path='/saved-movies'
-                    exact
-                    component={SavedMovies}
-                    loggedIn={loggedIn}
-                    isLoading={isLoading}
-                    onDislike={handleDeleteMovie}
-                    savedMovies={savedMovies}
-                    setKeyword={setSearchKeyword}
-                >
-                </ProtectedRoute>
+                    <ProtectedRoute
+                        path='/movies'
+                        exact
+                        component={Movies}
+                        loggedIn={loggedIn}
+                        isLoading={isLoading}
+                        movies={movies}
+                        onSubmit={handleSearchMovies}
+                        onLike={handleSaveMovie}
+                        onDislike={handleDeleteMovie}
+                        searchKeyword={searchKeyword}
+                        savedMovies={savedMovies}
+                        setAllMovies={setAllMovies}
+                    >
+                    </ProtectedRoute>
 
-                <ProtectedRoute
-                    path='/profile'
-                    exact
-                    component={Profile}
-                    loggedIn={loggedIn}
-                    onEditProfile={handleUpdateUser}
-                    signOut={signOut}
-                    infoMessage={profileMessage}
-                >
-                </ProtectedRoute>
+                    <ProtectedRoute
+                        path='/saved-movies'
+                        exact
+                        component={SavedMovies}
+                        loggedIn={loggedIn}
+                        isLoading={isLoading}
+                        onDislike={handleDeleteMovie}
+                        savedMovies={savedMovies}
+                        setKeyword={setSearchKeyword}
+                    >
+                    </ProtectedRoute>
 
-                <Route path='/not-found'>
-                    <NotFound />
-                </Route>
-                <Redirect to='/not-found'/>
-            </Switch>
+                    <ProtectedRoute
+                        path='/profile'
+                        exact
+                        component={Profile}
+                        loggedIn={loggedIn}
+                        onEditProfile={handleUpdateUser}
+                        signOut={signOut}
+                        infoMessage={profileMessage}
+                    >
+                    </ProtectedRoute>
 
-            {useRouteMatch(hideFooter) ? null : <Footer />}
-        </div>
+                    <Route path='/not-found'>
+                        <NotFound/>
+                    </Route>
+                    <Redirect to='/not-found'/>
+                </Switch>
+
+                {useRouteMatch(hideFooter) ? null : <Footer/>}
+            </div>
         </CurrentUserContext.Provider>
     );
 }
