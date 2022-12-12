@@ -60,10 +60,18 @@ function Login({onAuth, infoMessage}) {
               {errors.password}
             </span>
                 <p className='login__info-message'>{infoMessage}</p>
-                <button className="login__button" type="submit">Войти</button>
+                <button className={`login__button ${!isValid && 'login__button_disabled'}`}
+                        type="submit"
+                        form="login"
+                        disabled={!isValid}
+                >
+                    Войти
+                </button>
             </form>
-            <p className="login__text">Ещё не зарегистрированы? <a className="login__link"
-                                                                   href="/signup">Регистрация</a></p>
+            <p className="login__text">
+                Ещё не зарегистрированы?
+                <a className="login__link"
+                   href="/signup">Регистрация</a></p>
         </section>
     );
 }
