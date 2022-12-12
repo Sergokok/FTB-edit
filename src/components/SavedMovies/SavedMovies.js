@@ -24,6 +24,7 @@ const SavedMovies = ({
         localStorage.setItem("checkBox", JSON.stringify(!checkActive));
     };
 
+
     useEffect(() => {
         const checkLocal = localStorage.getItem("checkBox");
         if (checkLocal === "true") {
