@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import {useLocation} from "react-router-dom";
+import {getCards} from "../../utils/constants";
 
 const MoviesCardList = ({
     movies,
@@ -18,14 +19,14 @@ const MoviesCardList = ({
     const [moviesToShow, setMoviesToShow] = React.useState([]);
     const [hiddenButton, setHiddenButton] = React.useState(false);
 
-    const getCards = (windowSize) => {
-        if (windowSize > 1200) {
-            return {first: 12, extra: 3};
-        } else if (windowSize > 700) {
-            return {first: 12, extra: 2};
-        }
-        return {first: 12, extra: 1};
-    }
+    // const getCards = (windowSize) => {
+    //     if (windowSize > 1200) {
+    //         return {first: 12, extra: 3};
+    //     } else if (windowSize > 700) {
+    //         return {first: 12, extra: 2};
+    //     }
+    //     return {first: 12, extra: 1};
+    // }
 
     const renderAddCards = React.useCallback(() => {
         const count = Math.min(movies.length, currentCards + addCards);
