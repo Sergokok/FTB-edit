@@ -236,19 +236,6 @@ function App() {
                         )}
                     </Route>
 
-                    {/*<Route path='/signup'>*/}
-                    {/*    <Register*/}
-                    {/*        onAuth={onRegister}*/}
-                    {/*        infoMessage={registerMessage}*/}
-                    {/*    />*/}
-                    {/*</Route>*/}
-
-                    {/*<Route path='/signin'>*/}
-                    {/*    <Login*/}
-                    {/*        onAuth={onLogin}*/}
-                    {/*        infoMessage={loginMessage}/>*/}
-                    {/*</Route>*/}
-
                     <ProtectedRoute
                         path='/movies'
                         exact
