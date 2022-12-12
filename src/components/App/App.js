@@ -139,7 +139,7 @@ function App() {
         setFilteredMovies(newMovies);
         localStorage.setItem('searchKeyword', name);
         setSearchKeyword(name);
-        setTimeout(() => setIsLoading(false), 1500);
+        setTimeout(() => setIsLoading(false), 1000);
     }
 
     const signOut = () => {
