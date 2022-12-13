@@ -83,7 +83,8 @@ function App() {
                 setMovies(filteredMovies);
             }
         }
-    }, [loggedIn, filteredMovies])
+    }, [filteredMovies]);
+    // }, [loggedIn, filteredMovies])
 
     const onRegister = ({name, password, email}) => {
         mainApi
